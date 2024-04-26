@@ -5,7 +5,8 @@ FROM ruby:3.1.2
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev curl 
 
 # Install other dependencies 
-# node js , postgres , yarn 
+# node js , yarn 
+# postgres 
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs

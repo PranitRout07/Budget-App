@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rails-app-config
+data:
+  DATABASE_URL: "postgres://Budgy:mypassword@postgres/Budgy_development"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  POSTGRES_DB: "Budgy_development"
+  POSTGRES_USER: "Budgy"

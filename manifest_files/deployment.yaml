@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rails-app
+  template:
+    metadata:
+      labels:
+        app: rails-app
+    spec:
+      initContainers:
+      - name: db-migrate
+        image: pranit007/rails-app:latest
+        command: ["rails", "db:migrate", "RAILS_ENV=development"]
+        env:
+        - name: RAILS_ENV
+          value: development
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rails-app-config
+              key: DATABASE_URL
+      containers:
+      - name: rails-app
+        image: pranit007/rails-app:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rails-app-config
+              key: DATABASE_URL
+        - name: RAILS_ENV
+          value: development
+      restartPolicy: Always
+
+

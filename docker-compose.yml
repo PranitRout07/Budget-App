@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=Budgy_development
+      - POSTGRES_USER=Budgy
+      - POSTGRES_PASSWORD=mypassword
+
+    networks:
+      - local-network
+
+  rails-app:
+    image: pranit007/budget-rails-app:1.0.1
+    environment:
+      - DATABASE_URL=postgres://Budgy:mypassword@database/Budgy_development
+    depends_on:
+      - database
+    ports:
+      - "3000:3000"
+    networks:
+      - local-network
+    command: >
+      bash -c "
+      while !</dev/tcp/database/5432; do sleep 1; done;
+      rails db:migrate RAILS_ENV=development && rails server -b '0.0.0.0'
+      "
+networks:
+  local-network:
